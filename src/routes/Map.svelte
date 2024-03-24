@@ -2,7 +2,6 @@
     import { onMount } from "svelte";
 
     onMount(async () => {
-        const Map = (await import("@arcgis/core/Map")).default;
         const WebMap = (await import("@arcgis/core/WebMap")).default;
         const MapView = (await import("@arcgis/core/views/MapView")).default;
         const Bookmarks = (await import("@arcgis/core/widgets/Bookmarks"))
