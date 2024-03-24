@@ -3,15 +3,45 @@
 
     onMount(async () => {
         const Map = (await import("@arcgis/core/Map")).default;
+        const WebMap = (await import("@arcgis/core/WebMap")).default;
         const MapView = (await import("@arcgis/core/views/MapView")).default;
+        const Bookmarks = (await import("@arcgis/core/widgets/Bookmarks"))
+            .default;
+        const Expand = (await import("@arcgis/core/widgets/Expand")).default;
 
-        const map = new Map({
-            basemap: "gray-vector",
+        const webmap = new WebMap({
+            portalItem: {
+                id: "aa1d3f80270146208328cf66d022e09c",
+            },
         });
 
         const view = new MapView({
             container: "viewDiv",
-            map: map,
+            map: webmap,
+        });
+
+        const bookmarks = new Bookmarks({
+            view,
+            // allows bookmarks to be added, edited, or deleted
+            editingEnabled: true,
+        });
+
+        const bkExpand = new Expand({
+            view,
+            content: bookmarks,
+            expanded: true,
+        });
+
+        // Add the widget to the top-right corner of the view
+        view.ui.add(bkExpand, "top-right");
+
+        // bonus - how many bookmarks in the webmap?
+        view.when(() => {
+            if (webmap.bookmarks && webmap.bookmarks.length) {
+                console.log("Bookmarks: ", webmap.bookmarks.length);
+            } else {
+                console.log("No bookmarks in this webmap.");
+            }
         });
 
         view.when(() => {
